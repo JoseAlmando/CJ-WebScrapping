@@ -21,17 +21,18 @@ namespace WebScrapping.Services
             _urlService = urlsServices;
         }
 
-        public async  void Run()
+        public async Task Run()
         {
             List<UrlModel> urls;
             try
             {
                 urls = await _urlService.GetAll();
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 throw ex;
             }
-            
+
             foreach (UrlModel url in urls)
             {
                 var exist = await ExistProduct(url.UrlLink, url.Selector);
@@ -40,10 +41,17 @@ namespace WebScrapping.Services
                     try
                     {
                         await _urlService.FindSuccessUpdate(url.Id.ToString());
+                        Console.WriteLine($"Producto entontrado: {url.Product}");
                     }
-                    catch (Exception ex) {
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Producto no entontrado: {url.Product}");
                         throw ex;
                     }
+                }
+                else
+                {
+                    Console.WriteLine($"Producto no entontrado: {url.Product}");
                 }
             }
         }
@@ -61,10 +69,10 @@ namespace WebScrapping.Services
                 }
                 );
             await using var page = await browser.NewPageAsync();
-            await page.GoToAsync(url);
 
             try
             {
+                await page.GoToAsync(url);
                 if (isId)
                     await page.WaitForSelectorAsync($"#{selector}");
                 else

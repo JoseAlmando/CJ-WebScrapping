@@ -8,16 +8,9 @@ namespace WebScrapping
 {
     internal class Program
     {
-        static ApplicationDBContext context;
-        static UrlService _urlService;
-        static WebScrappingService _webScrappingService;
-
-        public Program()
-        {
-            context = new();
-            _urlService = new(context);
-            _webScrappingService = new(_urlService);
-        }
+        static ApplicationDBContext context = new();
+        static UrlService _urlService = new(context);
+        static WebScrappingService _webScrappingService = new(_urlService);
 
         static async Task Main(string[] args)
         {
@@ -58,9 +51,11 @@ namespace WebScrapping
                             urlModel.Selector = Console.ReadLine() ?? "";
 
                             await _urlService.SaveUrl(urlModel);
+
+                            Console.WriteLine("Exito");
                             break;
                         case 2:
-                            ListarUrls();
+                            await ListarUrls();
 
                             urlModel = new();
 
@@ -78,9 +73,10 @@ namespace WebScrapping
 
                             Console.WriteLine("Selector: ");
                             urlModel.Selector = Console.ReadLine() ?? urlModel.Selector;
+                            Console.WriteLine("Exito");
                             break;
                         case 3:
-                            ListarUrls();
+                            await ListarUrls();
 
                             Console.WriteLine("Id: ");
                             string _id = Console.ReadLine() ?? "";
@@ -89,22 +85,25 @@ namespace WebScrapping
                             urlModel = await _urlService.GetUrlById(_id);
                             printUrlData(urlModel);
 
+                            Console.WriteLine("Exito");
                             break;
                         case 4:
-                            ListarUrls();
-
+                            await ListarUrls();
 
                             Console.WriteLine("Id: ");
                             string dId = Console.ReadLine() ?? "";
                             if (string.IsNullOrEmpty(dId)) throw new Exception("Debe seleccionar un ID: ");
 
                             await _urlService.Delete(dId);
+                            Console.WriteLine("Exito");
                             break;
                         case 5:
-                            ListarUrls();
+                            await ListarUrls();
+                            Console.WriteLine("Exito");
                             break;
                         case 6:
-                           
+                            await _webScrappingService.Run();
+                            Console.WriteLine("Exito");
                             break;
                         default:
                             Console.WriteLine("La opcion ingresada incorrecta");
@@ -115,10 +114,14 @@ namespace WebScrapping
                 {
                     Console.WriteLine(ex.ToString());
                 }
+
+                Console.WriteLine("¿Continuar? 1.- Si. Otra tecla no.");
+                nextContinue = Console.ReadLine() == "1" ? true : false;
+
             } while (nextContinue == true);
         }
 
-        private static async void ListarUrls()
+        private static async Task ListarUrls()
         {
             var urls = await _urlService.GetAll();
             if (urls is null)
