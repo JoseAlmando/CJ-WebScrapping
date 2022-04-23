@@ -1,5 +1,6 @@
 ﻿using System;
 using PuppeteerSharp;
+using WebScrapping.Models;
 
 namespace WebScrapping
 {
@@ -9,13 +10,13 @@ namespace WebScrapping
 
         static readonly object[] urls
             = {
-                new MUrl {
+                new UrlModel {
                     Product = "Bloqued Iphone",
                     Url = "https://www.amazon.com/iPhone-bloqueado-suscripci%C3%B3n-empresa-telefon%C3%ADa/dp/B09G9CX7DK/ref=sr_1_1_sspa?__mk_es_US=%C3%85M%C3%85%C5%BD%C3%95%C3%91&keywords=iphone+13&qid=1650322902&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUExTE1VNVdORVA2OEFBJmVuY3J5cHRlZElkPUEwNjQyNTg5MkNVMUFINzlIQkdaTCZlbmNyeXB0ZWRBZElkPUEwNDkxMDY2MjJPR0U0Ukw1MTRCTSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=",
                     Selector = "qa-availability-message"
 
                 },
-                new MUrl
+                new UrlModel
                 {
                     Product = "Puppeteer article",
                     Url = "https://www.toptal.com/puppeteer/headless-browser-puppeteer-tutorial",
@@ -26,7 +27,7 @@ namespace WebScrapping
 
         static async Task Main(string[] args)
         {
-            foreach (MUrl e in urls)
+            foreach (UrlModel e in urls)
             {
                 var r = await existProduct(e.Url, e.Selector);
                 Console.WriteLine("Exist: " + r);
@@ -66,13 +67,4 @@ namespace WebScrapping
             return result;
         }
     }
-
-    class MUrl
-    {
-        public string Product { get; set; }
-        public string Url { get; set; }
-        public string Selector { get; set; }
-        public bool findSuccess { get; set; }
-    }
-
 }
