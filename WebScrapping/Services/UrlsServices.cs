@@ -16,10 +16,19 @@ namespace WebScrapping.Services
         {
             _context = context;
         }
+
+        private void ValidateUrl(UrlModel url)
+        {
+            if (string.IsNullOrEmpty(url.Product)) throw new Exception("El producto es requerido");
+            if (string.IsNullOrEmpty(url.Selector)) throw new Exception("El selector es requerido");
+            if (string.IsNullOrEmpty(url.UrlLink)) throw new Exception("El link es requerido");
+        }
+
         public async Task<UrlModel> SaveUrl(UrlModel url)
         {
             try
             {
+                ValidateUrl(url);
                 _context.UrlModel.Add(url);
                 await _context.SaveChangesAsync();
                 return url;
@@ -34,7 +43,7 @@ namespace WebScrapping.Services
         {
             try
             {
-                return await _context.UrlModel.ToListAsync();
+                return await _context.UrlModel.Where(x => x.FindSuccess == false).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -60,6 +69,7 @@ namespace WebScrapping.Services
         {
             try
             {
+                ValidateUrl(url);
                 _context.Update(url);
                 await _context.SaveChangesAsync();
                 return url;
