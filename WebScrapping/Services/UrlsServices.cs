@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebScrapping.Services
 {
-    internal class UrlsServices
+    public class UrlsServices
     {
     }
 }
