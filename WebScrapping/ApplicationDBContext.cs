@@ -8,9 +8,9 @@ using WebScrapping.Models;
 
 namespace WebScrapping
 {
-    class ApplicationDBContext: DbContext
+    public class ApplicationDBContext: DbContext
     {
-        public DbSet<UrlModel> urlModel { get; set; }
+        public DbSet<UrlModel> UrlModel { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

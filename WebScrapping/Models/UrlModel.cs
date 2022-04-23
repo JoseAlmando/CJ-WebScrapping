@@ -12,10 +12,11 @@ namespace WebScrapping.Models
     [Table("Urls")]
     public class UrlModel
     {
-        public Guid id { get; set; }
-        public string product { get; set; }
-        public string url { get; set; }
-        public string selector { get; set; }
-        public bool findSuccess { get; set; }
+        //[Key]
+        public Guid Id { get; set; }
+        public string Product { get; set; }
+        public string UrlLink { get; set; }
+        public string Selector { get; set; }
+        public bool FindSuccess { get; set; }
     }
 }

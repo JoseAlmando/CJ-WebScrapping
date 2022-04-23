@@ -13,14 +13,14 @@ namespace WebScrapping
             = {
                 new UrlModel {
                     Product = "Bloqued Iphone",
-                    Url = "https://www.amazon.com/iPhone-bloqueado-suscripci%C3%B3n-empresa-telefon%C3%ADa/dp/B09G9CX7DK/ref=sr_1_1_sspa?__mk_es_US=%C3%85M%C3%85%C5%BD%C3%95%C3%91&keywords=iphone+13&qid=1650322902&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUExTE1VNVdORVA2OEFBJmVuY3J5cHRlZElkPUEwNjQyNTg5MkNVMUFINzlIQkdaTCZlbmNyeXB0ZWRBZElkPUEwNDkxMDY2MjJPR0U0Ukw1MTRCTSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=",
+                    UrlLink = "https://www.amazon.com/iPhone-bloqueado-suscripci%C3%B3n-empresa-telefon%C3%ADa/dp/B09G9CX7DK/ref=sr_1_1_sspa?__mk_es_US=%C3%85M%C3%85%C5%BD%C3%95%C3%91&keywords=iphone+13&qid=1650322902&sr=8-1-spons&psc=1&spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUExTE1VNVdORVA2OEFBJmVuY3J5cHRlZElkPUEwNjQyNTg5MkNVMUFINzlIQkdaTCZlbmNyeXB0ZWRBZElkPUEwNDkxMDY2MjJPR0U0Ukw1MTRCTSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU=",
                     Selector = "qa-availability-message"
 
                 },
                 new UrlModel
                 {
                     Product = "Puppeteer article",
-                    Url = "https://www.toptal.com/puppeteer/headless-browser-puppeteer-tutorial",
+                    UrlLink = "https://www.toptal.com/puppeteer/headless-browser-puppeteer-tutorial",
                     Selector = "qa-availability-message"
 
                 }
@@ -28,12 +28,85 @@ namespace WebScrapping
 
         static async Task Main(string[] args)
         {
-            foreach (UrlModel e in urls)
+            var dbContext = new ApplicationDBContext();
+
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Web Scrapping Project");
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Menu:");
+            Console.WriteLine("----------------------");
+            Console.WriteLine("CRUD URLs");
+            Console.WriteLine("----------------------");
+            Console.WriteLine("Presione 1 para crear busqueda");
+            Console.WriteLine("Presione 2 para actualizar busqueda");
+            Console.WriteLine("Presione 3 para consultar busqueda");
+            Console.WriteLine("Presione 4 para eliminar busqueda");
+            Console.WriteLine("Presione 5 para listar las busquedas");
+
+            int option = Convert.ToInt32(Console.ReadLine());
+            switch (option)
             {
-                var r = await existProduct(e.Url, e.Selector);
-                Console.WriteLine("Exist: " + r);
+                case 1:
+                    Console.WriteLine("Producto:");
+                    string product = Console.ReadLine();
+                    Console.WriteLine("URL:");
+                    string url = Console.ReadLine();
+                    Console.WriteLine("Selector:");
+                    string selector = Console.ReadLine();
+
+                    var saveUrl = new UrlModel()
+                    {
+                        Id = new Guid(),
+                        Product = product,
+                        UrlLink = url,
+                        Selector = selector,
+                        FindSuccess = false
+                    };
+
+                    dbContext.UrlModel.Add(saveUrl);
+                    dbContext.SaveChanges();
+                    Console.WriteLine($"El {product} ha sido guardado correctamente!!");
+
+                    break;
+                case 2:
+                    Console.WriteLine("Producto:");
+                    string productUpd = Console.ReadLine();
+                    var dataUpd = dbContext.UrlModel.Where(x => x.Id == new Guid(productUpd)).FirstOrDefault();
+                    if (dataUpd == null) Console.WriteLine("Este producto no existe");
+                    Console.WriteLine("URL:");
+                    dataUpd.UrlLink = Console.ReadLine();
+                    Console.WriteLine("Selector:");
+                    dataUpd.Selector = Console.ReadLine();
+
+                    dbContext.UrlModel.Update(dataUpd);
+                    dbContext.SaveChanges();
+                    break;
+                case 3:
+                    string s = Console.ReadLine();
+
+                    var x = dbContext.UrlModel.Find(new Guid(s));
+
+                    break;
+                case 4:
+                    Console.WriteLine("Producto:");
+                    string productDel = Console.ReadLine();
+                    var dataDel = dbContext.UrlModel.Find(new Guid(productDel));
+                    dbContext.Remove(dataDel);
+                    dbContext.SaveChanges();
+
+                    break;
+                case 5:
+                    var data = dbContext.UrlModel.ToList();
+                    foreach (var item in data)
+                    {
+                        Console.WriteLine(item.Product);
+                    }
+                    break;
+                default:
+                    Console.WriteLine("La opcion ingresada incorrecta");
+                    break;
+
             }
-            Console.ReadLine();
         }
 
         static async Task<bool> existProduct(string url, string selector, bool isId = false)
