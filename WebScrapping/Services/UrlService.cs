@@ -8,11 +8,11 @@ using WebScrapping.Models;
 
 namespace WebScrapping.Services
 {
-    public class UrlsServices
+    public class UrlService
     {
         private readonly ApplicationDBContext _context;
 
-        public UrlsServices(ApplicationDBContext context)
+        public UrlService(ApplicationDBContext context)
         {
             _context = context;
         }

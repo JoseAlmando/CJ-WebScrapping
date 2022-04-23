@@ -11,17 +11,17 @@ namespace WebScrapping.Services
 {
     public class WebScrappingService
     {
-        readonly UrlsServices _urlService;
+        readonly UrlService _urlService;
         static List<UrlModel> urls;
 
 
 
-        public WebScrappingService(UrlsServices urlsServices)
+        public WebScrappingService(UrlService urlsServices)
         {
             _urlService = urlsServices;
         }
 
-        async  void Run()
+        public async  void Run()
         {
             List<UrlModel> urls;
             try
