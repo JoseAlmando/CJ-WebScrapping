@@ -6,15 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using WebScrapping.Models;
 
+using System.Configuration;
 namespace WebScrapping
 {
     public class ApplicationDBContext: DbContext
     {
         public DbSet<UrlModel> UrlModel { get; set; }
 
+        private readonly string stringConnection = ConfigurationManager.AppSettings["stringConnection"] ?? "";
+
+        public ApplicationDBContext()
+        {
+            if (string.IsNullOrEmpty(stringConnection)) throw new Exception("Debe especificar una cadena de conexion en el App.config");
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.;Database=WebScrappingDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(stringConnection);
         }
     }
 }

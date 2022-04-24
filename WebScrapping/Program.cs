@@ -4,6 +4,7 @@ using PuppeteerSharp;
 using WebScrapping.Models;
 using WebScrapping.Services;
 
+using System.Configuration;
 namespace WebScrapping
 {
     internal class Program
@@ -15,8 +16,8 @@ namespace WebScrapping
         static async Task Main(string[] args)
         {
             UrlModel urlModel;
-
             bool nextContinue = false;
+
             do
             {
                 Console.WriteLine("----------------------");

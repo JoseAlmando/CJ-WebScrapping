@@ -1,6 +1,7 @@
 ﻿using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +13,6 @@ namespace WebScrapping.Services
     public class WebScrappingService
     {
         readonly UrlService _urlService;
-        static List<UrlModel> urls;
-
-
 
         public WebScrappingService(UrlService urlsServices)
         {
@@ -58,7 +56,8 @@ namespace WebScrapping.Services
 
         static async Task<bool> ExistProduct(string url, string selector, bool isId = false)
         {
-            string _browser = @"C:\Program Files\Google\Chrome\Application\chrome.exe";
+            string _browser = ConfigurationManager.AppSettings["chromePath"];
+
 
             bool result = false;
             await using var browser = await Puppeteer.LaunchAsync(
