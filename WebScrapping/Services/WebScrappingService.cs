@@ -56,7 +56,7 @@ namespace WebScrapping.Services
 
         static async Task<bool> ExistProduct(string url, string selector, bool isId = false)
         {
-            string _browser = ConfigurationManager.AppSettings["chromePath"];
+            string _browser = ConfigurationManager.AppSettings["chromePath"] ?? @"C:\Program Files\Google\Chrome\Application\chrome.exe";
 
 
             bool result = false;
