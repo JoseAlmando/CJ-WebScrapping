@@ -13,7 +13,7 @@ namespace WebScrapping
     {
         public DbSet<UrlModel> UrlModel { get; set; }
 
-        private readonly string stringConnection = ConfigurationManager.AppSettings["stringConnection"] ?? "Server=.;Database=WebScrappingDB;Trusted_Connection=True";
+        private readonly string stringConnection = ConfigurationManager.AppSettings["stringConnection"] ?? "Server=.;Database=WebScrappingDB;Trusted_Connection=True;";
 
         public ApplicationDBContext()
         {

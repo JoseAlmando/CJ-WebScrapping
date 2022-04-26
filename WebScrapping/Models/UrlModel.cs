@@ -18,5 +18,6 @@ namespace WebScrapping.Models
         public string UrlLink { get; set; }
         public string Selector { get; set; }
         public bool FindSuccess { get; set; } = false;
+        public byte[]? Img { get; set; }
     }
 }

@@ -111,5 +111,20 @@ namespace WebScrapping.Services
             }
            
         }
+        public async Task<UrlModel> ImgUpdate(string id, byte[] img)
+        {
+            try
+            {
+                var url = await GetUrlById(id);
+                url.Img = img;
+                await UpdateUrl(url);
+                return url;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace WebScrapping.Services
 
             foreach (UrlModel url in urls)
             {
-                var exist = await ExistProduct(url.UrlLink, url.Selector);
+                var exist = await ExistProduct(url.UrlLink, url.Selector, url.Id.ToString());
                 if (exist)
                 {
                     try
@@ -54,7 +55,7 @@ namespace WebScrapping.Services
             }
         }
 
-        static async Task<bool> ExistProduct(string url, string selector, bool isId = false)
+        async Task<bool> ExistProduct(string url, string selector, string id, bool isId = false)
         {
             string _browser = ConfigurationManager.AppSettings["chromePath"] ?? @"C:\Program Files\Google\Chrome\Application\chrome.exe";
 
@@ -81,7 +82,19 @@ namespace WebScrapping.Services
 
                 if (content is not null)
                     if (content.Contains($"{selector}"))
+                    {
+                        string stringPath =  @"C:\Images\";
+                        System.IO.Directory.CreateDirectory(stringPath);
+                        //await page.ScreenshotAsync(stringPath + id + ".png");
+                        var screeshotBytes = await page.ScreenshotDataAsync(new ScreenshotOptions() { FullPage = true, Type= ScreenshotType.Png });
+                        MemoryStream ms = new MemoryStream(screeshotBytes);
+                        var image = Image.FromStream(ms);
+                        image.Save(
+                            stringPath + id + ".png");
+                        await _urlService.ImgUpdate(id, screeshotBytes);
+
                         result = true;
+                    }
             }
             catch { }
 
